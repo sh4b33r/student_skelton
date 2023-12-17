@@ -179,15 +179,7 @@ class AddScreen extends StatelessWidget {
                     onPressed: () async {
                       if (_formKey.currentState!.validate() &&
                           controller.image.isNotEmpty) {
-                        await Add();
-                        //   _nameCont.clear();
-                        //   _ageCont.clear();
-                        //   _placeCont.clear();
-                        //   _stdCont.clear();
-                        //   setState(() {
-                        //     _selectedImage = null;
-
-                        //   });
+                        await addSTd();
                         Get.snackbar(
                           'Success',
                           "Student Data Added",
@@ -233,14 +225,15 @@ class AddScreen extends StatelessWidget {
     );
   }
 
-  Add() async {
-    final Studenetdetails = StudentModel(
+  addSTd() async {
+
+  final studenetdetails = StudentModel(
         name: _nameCont.text,
         age: _ageCont.text,
         photo: controller.image,
         std: _stdCont.text);
 
-    await controller.addStudents(Studenetdetails);
+    await controller.addStudents(studenetdetails);
   }
 
   clear() {
@@ -249,5 +242,6 @@ class AddScreen extends StatelessWidget {
     _placeCont.clear();
     _stdCont.clear();
     controller.image = '';
+    controller.update();
   }
 }
