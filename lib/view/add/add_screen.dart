@@ -27,7 +27,7 @@ class AddScreen extends StatelessWidget {
 
           decoration: BoxDecoration(
             boxShadow: [
-              BoxShadow(
+              const BoxShadow(
                 color: Colors.black,
                 offset: Offset(3, 5),
                 blurRadius: 40,
@@ -50,7 +50,7 @@ class AddScreen extends StatelessWidget {
                   //     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   //   ),
                   // ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Padding(
@@ -61,17 +61,17 @@ class AddScreen extends StatelessWidget {
                         labelText: 'Name',
                         border: OutlineInputBorder(),
                       ),
-                      // validator: _emptyValidator,
                       onChanged: (value) {
                         _formKey.currentState!.validate();
                       },
                       validator: (value) {
-                        
-  if (value == null || !RegExp(r"^[a-zA-Z][a-zA-Z\- ]{2,28}$").hasMatch(value.trim())) {
-  return "Enter a Valid name";
-} else {
-  return null;
-}
+                        if (value == null ||
+                            !RegExp(r"^[a-zA-Z][a-zA-Z\- ]{2,28}$")
+                                .hasMatch(value.trim())) {
+                          return "Enter a Valid name";
+                        } else {
+                          return null;
+                        }
                       },
                     ),
                   ),
@@ -87,7 +87,6 @@ class AddScreen extends StatelessWidget {
                       onChanged: (value) {
                         _formKey.currentState!.validate();
                       },
-                      // validator: _emptyValidator,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "Enter a Valid age ";
@@ -109,7 +108,7 @@ class AddScreen extends StatelessWidget {
                         labelText: 'Standard',
                         border: OutlineInputBorder(),
                       ),
-                        onChanged: (value) {
+                      onChanged: (value) {
                         _formKey.currentState!.validate();
                       },
                       validator: (value) {
@@ -135,10 +134,9 @@ class AddScreen extends StatelessWidget {
                         labelText: 'Place',
                         border: OutlineInputBorder(),
                       ),
-                        onChanged: (value) {
+                      onChanged: (value) {
                         _formKey.currentState!.validate();
                       },
-                      // validator: _emptyValidator,
                       validator: (value) {
                         if (value == null ||
                             !RegExp(r"^[a-zA-Z0-9\- ]{1,20}$")
@@ -180,38 +178,77 @@ class AddScreen extends StatelessWidget {
                       if (_formKey.currentState!.validate() &&
                           controller.image.isNotEmpty) {
                         await addSTd();
-                        Get.snackbar(
-                          'Success',
-                          "Student Data Added",
-                          // colorText: Colors.white,
-                          backgroundColor:
-                              const Color.fromARGB(255, 4, 178, 91),
-                          icon: const Icon(Icons.done),
-                        );
+                         Get.showSnackbar(const GetSnackBar(
+                          backgroundColor: Colors.green,
+                          title: "Success",
+                          message: "Data Added Successfully",
+                          duration: Duration(seconds: 2),
+                          backgroundGradient: LinearGradient(colors: [
+                            Color.fromARGB(255, 11, 220, 21),
+                            Color.fromARGB(255, 33, 209, 42),
+                           
+                          ]),
+                          icon: Icon(
+                            Icons.done_all,
+                            color: Colors.white,
+                          ),
+                          borderRadius: 8,
+                          margin: EdgeInsets.all(8.0),
+                          dismissDirection: DismissDirection.horizontal,
+                        ));
                         clear();
                       } else if (controller.image.isEmpty) {
-                        Get.snackbar(
-                          "Image Not Found",
-                          "Pleae try to add Image",
+                        Get.showSnackbar(const GetSnackBar(
                           backgroundColor: Colors.red,
-                          icon: Icon(Icons.image_not_supported_outlined,
-                              color: Colors.white),
-                          colorText: Colors.white,
-                        );
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Student Added Succesfully'),
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: Colors.green,
+                          title: "Image Not Found",
+                          message: "Please try to add Image",
+                          duration: Duration(seconds: 2),
+                          backgroundGradient: LinearGradient(colors: [
+                            Color.fromARGB(255, 198, 18, 18),
+                            Color.fromARGB(255, 237, 37, 23),
+                          ]),
+                          icon: Icon(
+                            Icons.priority_high,
+                            color: Colors.white,
                           ),
-                        );
+                          borderRadius: 8,
+                          margin: EdgeInsets.all(8.0),
+                          dismissDirection: DismissDirection.horizontal,
+                        ));
+
+                        // ScaffoldMessenger.of(context).showSnackBar(
+                        //   const SnackBar(
+                        //     content: Text('Student Added Succesfully'),
+                        //     behavior: SnackBarBehavior.floating,
+                        //     backgroundColor: Colors.green,
+                        //   ),
+                        // );
 
                         // }else{
                         //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:
                         //    Text('Please Enter All Fields',
 
                         //    )));
+                      }else{
+
+   Get.showSnackbar(const GetSnackBar(
+                          backgroundColor: Colors.red,
+                          title: "Failed to Add",
+                          message: "Please Fill All the forms as Required",
+                          duration: Duration(seconds: 2),
+                          backgroundGradient: LinearGradient(colors: [
+                            Color.fromARGB(255, 198, 18, 18),
+                            Color.fromARGB(255, 237, 37, 23),
+                          ]),
+                          icon: Icon(
+                            Icons.priority_high,
+                            color: Colors.white,
+                          ),
+                          borderRadius: 8,
+                          margin: EdgeInsets.all(8.0),
+                          dismissDirection: DismissDirection.horizontal,
+                        ));
+
                       }
                     },
                     child: const Text('Add'),
@@ -226,8 +263,7 @@ class AddScreen extends StatelessWidget {
   }
 
   addSTd() async {
-
-  final studenetdetails = StudentModel(
+    final studenetdetails = StudentModel(
         name: _nameCont.text,
         age: _ageCont.text,
         photo: controller.image,
