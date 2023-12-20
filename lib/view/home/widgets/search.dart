@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_app/controller/controller_main.dart';
 // import 'package:get/get.dart';
 
 
@@ -9,7 +11,7 @@ class CustomSearchBar extends StatelessWidget {
 
  final TextEditingController searchController = TextEditingController();
 
-  // final controller = Get.find<ScreenController>();
+  final controller = Get.find<MyGXController>();
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +20,13 @@ class CustomSearchBar extends StatelessWidget {
       child: TextFormField(
         controller: searchController,
         onChanged: (value) async {
-          // await controller.searchStudent(value);
+          await controller.searchStudents(value);
         },
         decoration: InputDecoration(
           prefixIcon: const Icon(Icons.search),
           suffixIcon: IconButton(
               onPressed: () {
+                controller.studentsRefresh();
                 searchController.clear();
               },
               icon: const Icon(Icons.close)),

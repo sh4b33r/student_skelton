@@ -4,47 +4,37 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import '../view/home/homescreen.dart';
 
-
 const String dBNAME = 'student_database';
-
 
 class MyGXController extends GetxController {
   RxList<StudentModel> studentListNot = <StudentModel>[].obs;
 
   navigation() async {
     Future.delayed(const Duration(seconds: 5), () async {
-      await Get.off(() => const MyHomePage());
+      await Get.off(() => MyHomePage());
     });
   }
 
   Future<void> addStudents(StudentModel value) async {
     final db = await Hive.openBox(dBNAME);
     value.id = await db.add(value);
-    db.put(value.id, value);
-    
-    
-
-
-   await studentsRefresh();
-       db.close();
+   await db.put(value.id, value);
+    studentsRefresh();
+    // db.close();
   }
 
   Future<void> editStudents(StudentModel value) async {
     final db = await Hive.openBox(dBNAME);
-    
+
     db.put(value.id, value);
- 
-    
-    // db.close();
+
     studentsRefresh();
-    db.close();
   }
 
   Future<List<dynamic>> getAllData() async {
     final db = await Hive.openBox(dBNAME);
-   
+
     return db.values.toList();
-    
   }
 
   Future<void> studentsRefresh() async {
@@ -53,6 +43,13 @@ class MyGXController extends GetxController {
     for (var element in allStudents) {
       studentListNot.add(element);
     }
+  }
+
+  Future<void> deleteData(int? id) async {
+    final db = await Hive.openBox(dBNAME);
+    await db.delete(id);
+    studentsRefresh();
+   
   }
 
   Future<void> searchStudents(String value) async {
@@ -65,14 +62,11 @@ class MyGXController extends GetxController {
     }
   }
 
-
-
-  String image = '';
+  RxString image = ''.obs;
 
   Future<void> pickImage() async {
     final imgFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    image = imgFile!.path;
+    image.value = imgFile!.path;
     update();
   }
-
 }

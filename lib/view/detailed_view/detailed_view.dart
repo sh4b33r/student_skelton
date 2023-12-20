@@ -1,13 +1,17 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get_app/model/model.dart';
+import 'package:get_app/view/theme/themes.dart';
 
 class DetailedView extends StatelessWidget {
-  const DetailedView({super.key});
+  final StudentModel value;
+ const DetailedView({super.key,required this.value});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
-      appBar: AppBar(backgroundColor: Colors.amber,),
+      appBar: AppBar(backgroundColor: Clr.appbar),
       
       body: ListView(
         children: [
@@ -15,7 +19,7 @@ class DetailedView extends StatelessWidget {
             
             padding: const EdgeInsets.all(40.0),
             child: Container(
-              color: Color.fromARGB(255, 205, 193, 91),
+              color: Color.fromARGB(255, 243, 241, 231),
               height: 600,
               width: 500,
               child: SizedBox(
@@ -26,26 +30,26 @@ class DetailedView extends StatelessWidget {
                   children: [
                     const SizedBox(height: 50,),
                     // imageProfileWidgetc,
-                    CircleAvatar(backgroundColor: Colors.black,radius: 40,),
+                    CircleAvatar(backgroundImage: FileImage(File(value.photo)),radius: 50,),
                     const SizedBox(height: 50,),
                     Text(
-                      'Name : name',
-                      style: const TextStyle(fontSize: 30,fontFamily: 'Raleway-VariableFont_wght',fontWeight: FontWeight.w900),
+                      'Name : ${value.name}',
+                      style: const TextStyle(fontSize: 30,fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 15,),
                     Text(
-                      'Age : age',
-                      style: const TextStyle(fontSize: 30,fontFamily: 'Raleway-VariableFont_wght',fontWeight: FontWeight.bold),
+                      'Age :  ${value.age}',
+                      style: const TextStyle(fontSize: 30,fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 15,),
                     Text(
-                      'Place : place',
-                      style: const TextStyle(fontSize: 30,fontFamily: 'Raleway-VariableFont_wght',fontWeight: FontWeight.bold),
+                      'Place :  ${value.place}',
+                      style: const TextStyle(fontSize: 30,fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 15,),
                     Text(
-                      'Standard : std',
-                      style: const TextStyle(fontSize: 30,fontFamily: 'Raleway-VariableFont_wght',fontWeight: FontWeight.bold),
+                      'Standard :${value.std}',
+                      style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),
                     )
                   ],
                 ),

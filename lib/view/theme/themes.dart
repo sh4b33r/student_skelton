@@ -10,3 +10,6 @@ final ThemeData  themeCustom = ThemeData(
 
     ));
 
+class Clr{
+static Color appbar= const Color.fromARGB(255, 159, 236, 175);
+}

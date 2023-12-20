@@ -1,9 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_app/controller/controller_main.dart';
 import 'package:get_app/model/model.dart';
+import 'package:get_app/view/theme/themes.dart';
 
 class AddScreen extends StatelessWidget {
   AddScreen({super.key});
@@ -12,12 +12,21 @@ class AddScreen extends StatelessWidget {
   final TextEditingController _stdCont = TextEditingController();
   final TextEditingController _placeCont = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+    final _name = GlobalKey<FormFieldState>();
+  final _age = GlobalKey<FormFieldState>();
+  final _std = GlobalKey<FormFieldState>();
+  final _place = GlobalKey<FormFieldState>();
   final MyGXController controller = Get.put(MyGXController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber,
+        backgroundColor: Clr.appbar,
+        centerTitle: true,
+        title: const Text(
+          "Add Student",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Padding(
         padding:
@@ -26,15 +35,15 @@ class AddScreen extends StatelessWidget {
           height: 700,
 
           decoration: BoxDecoration(
-            boxShadow: [
-              const BoxShadow(
+            boxShadow: const [
+              BoxShadow(
                 color: Colors.black,
                 offset: Offset(3, 5),
                 blurRadius: 40,
               ),
             ],
             borderRadius: BorderRadius.circular(20),
-            color: const Color.fromARGB(255, 158, 158, 158),
+            color: const Color.fromARGB(255, 235, 249, 227),
           ),
           // color: const Color.fromARGB(255, 162, 162, 162),
           child: SingleChildScrollView(
@@ -43,26 +52,21 @@ class AddScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // const Padding(
-                  //   padding: EdgeInsets.all(20.0),
-                  //   child: Text(
-                  //     'Add a Student Record',
-                  //     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                  //   ),
-                  // ),
+           
                   const SizedBox(
                     height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                     child: TextFormField(
+                      key: _name,
                       controller: _nameCont,
                       decoration: const InputDecoration(
                         labelText: 'Name',
                         border: OutlineInputBorder(),
                       ),
                       onChanged: (value) {
-                        _formKey.currentState!.validate();
+                       _name.currentState!.validate();
                       },
                       validator: (value) {
                         if (value == null ||
@@ -78,6 +82,7 @@ class AddScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                     child: TextFormField(
+                        key: _age,
                       keyboardType: TextInputType.number,
                       controller: _ageCont,
                       decoration: const InputDecoration(
@@ -85,7 +90,7 @@ class AddScreen extends StatelessWidget {
                         border: OutlineInputBorder(),
                       ),
                       onChanged: (value) {
-                        _formKey.currentState!.validate();
+                        _age.currentState!.validate();
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -102,6 +107,7 @@ class AddScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                     child: TextFormField(
+                        key: _std,
                       keyboardType: TextInputType.number,
                       controller: _stdCont,
                       decoration: const InputDecoration(
@@ -109,7 +115,7 @@ class AddScreen extends StatelessWidget {
                         border: OutlineInputBorder(),
                       ),
                       onChanged: (value) {
-                        _formKey.currentState!.validate();
+                        _std.currentState!.validate();
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -129,13 +135,14 @@ class AddScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                     child: TextFormField(
+                        key: _place,
                       controller: _placeCont,
                       decoration: const InputDecoration(
                         labelText: 'Place',
                         border: OutlineInputBorder(),
                       ),
                       onChanged: (value) {
-                        _formKey.currentState!.validate();
+                       _place.currentState!.validate();
                       },
                       validator: (value) {
                         if (value == null ||
@@ -148,7 +155,9 @@ class AddScreen extends StatelessWidget {
                       },
                     ),
                   ),
-
+                  const SizedBox(
+                    height: 10,
+                  ),
                   ElevatedButton.icon(
                     onPressed: () async {
                       await controller.pickImage();
@@ -159,26 +168,41 @@ class AddScreen extends StatelessWidget {
                   const SizedBox(
                     height: 30,
                   ),
-                  GetBuilder<MyGXController>(
-                    builder: (controller) {
-                      return SizedBox(
+                  
+                  // GetBuilder<MyGXController>(
+                  //   builder: (controller) {
+                  //     return SizedBox(
+                  //       width: 100,
+                  //       height: 100,
+                  //       child: controller.image.isNotEmpty
+                  //           ? Image.file(File(controller.image.value))
+                  //           : const Text(
+                  //               'Please Select An Image From Gallery',
+                  //               textAlign: TextAlign.center,
+                  //             ),
+                  //     );
+                  //   },
+                  // ),
+
+                  Obx(() {
+                    return SizedBox(
                         width: 100,
                         height: 100,
                         child: controller.image.isNotEmpty
-                            ? Image.file(File(controller.image))
+                            ? Image.file(File(controller.image.value))
                             : const Text(
                                 'Please Select An Image From Gallery',
                                 textAlign: TextAlign.center,
                               ),
                       );
-                    },
-                  ),
+                  } ),
+                  
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate() &&
                           controller.image.isNotEmpty) {
                         await addSTd();
-                         Get.showSnackbar(const GetSnackBar(
+                        Get.showSnackbar(const GetSnackBar(
                           backgroundColor: Colors.green,
                           title: "Success",
                           message: "Data Added Successfully",
@@ -186,7 +210,6 @@ class AddScreen extends StatelessWidget {
                           backgroundGradient: LinearGradient(colors: [
                             Color.fromARGB(255, 11, 220, 21),
                             Color.fromARGB(255, 33, 209, 42),
-                           
                           ]),
                           icon: Icon(
                             Icons.done_all,
@@ -229,9 +252,8 @@ class AddScreen extends StatelessWidget {
                         //    Text('Please Enter All Fields',
 
                         //    )));
-                      }else{
-
-   Get.showSnackbar(const GetSnackBar(
+                      } else {
+                        Get.showSnackbar(const GetSnackBar(
                           backgroundColor: Colors.red,
                           title: "Failed to Add",
                           message: "Please Fill All the forms as Required",
@@ -248,7 +270,6 @@ class AddScreen extends StatelessWidget {
                           margin: EdgeInsets.all(8.0),
                           dismissDirection: DismissDirection.horizontal,
                         ));
-
                       }
                     },
                     child: const Text('Add'),
@@ -266,8 +287,9 @@ class AddScreen extends StatelessWidget {
     final studenetdetails = StudentModel(
         name: _nameCont.text,
         age: _ageCont.text,
-        photo: controller.image,
-        std: _stdCont.text);
+        photo: controller.image.value,
+        std: _stdCont.text,
+        place: _placeCont.text);
 
     await controller.addStudents(studenetdetails);
   }
@@ -277,7 +299,7 @@ class AddScreen extends StatelessWidget {
     _ageCont.clear();
     _placeCont.clear();
     _stdCont.clear();
-    controller.image = '';
+    controller.image.value = '';
     controller.update();
   }
 }

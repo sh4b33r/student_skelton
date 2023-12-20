@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+  
     return SafeArea(
       child: GetMaterialApp(
         
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         title: 'Student DataBase',
         theme: themeCustom,
         // home:   MyHomePage(title: 'Flutter Demo Home Page'),
-        home:const SplashScreen(),
+        home: SplashScreen(),
       ),
     );
   }
